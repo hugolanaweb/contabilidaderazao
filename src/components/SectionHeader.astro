@@ -1,0 +1,16 @@
+---
+import { marcar } from '../lib/marca';
+interface Props {
+  kicker?: string;
+  titulo: string;
+  nivel?: 1 | 2;
+  id?: string;
+}
+const { kicker, titulo, nivel = 2, id } = Astro.props;
+const Tag = nivel === 1 ? 'h1' : 'h2';
+---
+<header class="sh">
+  {kicker && <p class="kicker">{kicker}</p>}
+  <Tag id={id}><Fragment set:html={marcar(titulo)} /></Tag>
+  <div class="apoio"><slot /></div>
+</header>

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+
+const trilha = [{ nome: 'Contato', href: '/contato' }];
+---
+<Base
+  titulo="Agendar diagnóstico tributário gratuito · Razão"
+  descricao="30 minutos para entender seus números: regime, Fator R e o que a reforma muda para sua empresa. Sem custo e sem compromisso."
+  trilha={trilha}
+>
+  <PageHero kicker="CONTATO" titulo="**30 minutos** para entender seus números." trilha={trilha}>
+    <p>Preencha o formulário. Nosso compromisso é responder em 1 dia útil.</p>
+  </PageHero>
+
+  <section class="sec sec-papel" aria-labelledby="h-form">
+    <div class="container grade">
+      <div>
+        <h2 id="h-form" class="sr-only">Formulário</h2>
+        <ContactForm />
+      </div>
+      <aside aria-labelledby="h-outros">
+        <h2 id="h-outros" class="h-menor">Outros canais</h2>
+        <ul class="lista-limpa">
+          <li><span class="placeholder">[WhatsApp]</span></li>
+          <li><span class="placeholder">[e-mail]</span></li>
+          <li><span class="placeholder">[endereço em Campinas, SP]</span></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .grade { display: grid; gap: var(--e6); grid-template-columns: 1fr; }
+  @media (min-width: 64rem) { .grade { grid-template-columns: 2fr 1fr; } }
+  .h-menor { font-size: 1.5rem; margin-bottom: var(--e2); }
+  li { margin-bottom: var(--e1); }
+</style>

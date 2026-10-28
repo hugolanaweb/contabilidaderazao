@@ -1,0 +1,46 @@
+---
+const colunas = [
+  { titulo: 'Páginas', links: [['/servicos', 'Serviços'], ['/reforma-tributaria', 'Reforma Tributária'], ['/fator-r', 'Fator R'], ['/painel', 'Painel Razão'], ['/migracao', 'Migração'], ['/sobre', 'Sobre']] },
+  { titulo: 'Contato', links: [['/contato', 'Agendar diagnóstico']] },
+  { titulo: 'Legal', links: [['/privacidade', 'Privacidade'], ['/termos', 'Termos']] },
+];
+---
+<footer class="ftr sec-grafite sec--sem-grade">
+  <div class="container">
+    <div class="ftr-grade">
+      <div>
+        <p class="ftr-nome">Razão<span class="ftr-ponto" aria-hidden="true"></span></p>
+        <p class="ftr-slogan">Todo número tem uma razão.</p>
+      </div>
+      {colunas.map((c) => (
+        <nav aria-label={c.titulo}>
+          <p class="rotulo">{c.titulo}</p>
+          <ul class="lista-limpa">
+            {c.links.map(([href, rot]) => <li><a href={href}>{rot}</a></li>)}
+            {c.titulo === 'Contato' && (
+              <>
+                <li><span class="placeholder">[telefone/WhatsApp]</span></li>
+                <li><span class="placeholder">[e-mail]</span></li>
+                <li><span class="placeholder">[endereço em Campinas, SP]</span></li>
+              </>
+            )}
+          </ul>
+        </nav>
+      ))}
+    </div>
+    <p class="ftr-legal"><span class="placeholder">[CNPJ]</span> · <span class="placeholder">[CRC]</span></p>
+    <p class="ftr-fict">Projeto conceitual de marca e website para uma empresa fictícia.</p>
+  </div>
+</footer>
+
+<style>
+  .ftr { padding-block: var(--e8); border-top: var(--borda) solid var(--linha-escura); background-color: var(--bg); color: var(--fg); }
+  .ftr-grade { display: grid; gap: var(--e4); grid-template-columns: 1fr; }
+  @media (min-width: 48rem) { .ftr-grade { grid-template-columns: 2fr 1fr 1fr 1fr; } }
+  .ftr-nome { font-family: var(--fonte-display); font-weight: 900; font-size: 2.5rem; margin: 0; }
+  .ftr-ponto { display: inline-block; width: 0.5rem; height: 0.5rem; background: var(--marca-texto); margin-left: 0.3rem; }
+  .ftr-slogan { color: var(--fg-2); }
+  .ftr li { margin-bottom: var(--e1); }
+  .ftr-legal { margin-top: var(--e6); font-family: var(--fonte-mono); font-size: var(--t-pequeno); color: var(--fg-2); }
+  .ftr-fict { font-family: var(--fonte-mono); font-size: var(--t-pequeno); color: var(--fg-2); border-top: var(--borda) solid var(--linha-escura); padding-top: var(--e2); margin: 0; }
+</style>

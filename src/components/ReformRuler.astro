@@ -1,0 +1,129 @@
+---
+import { getEntry } from 'astro:content';
+import SourceNote from './SourceNote.astro';
+import { marcosAno, marcosHome } from '../data/reforma';
+
+interface Props {
+  /** completo: ano a ano, com abas, "O que fazer" e fonte. resumo: lista estática dos marcos da Home. */
+  modo?: 'completo' | 'resumo';
+  /** número da primeira nota de fonte exibida (continua a numeração da página) */
+  inicioN?: number;
+}
+const { modo = 'resumo', inicioN = 1 } = Astro.props;
+const marcos = modo === 'completo' ? marcosAno : marcosHome;
+const uid = `rr-${modo}`;
+const fontesN = new Map<string, string>();
+marcos.forEach((m) => { if (!fontesN.has(m.fonteId)) fontesN.set(m.fonteId, String(inicioN + fontesN.size)); });
+const nomesFonte = new Map<string, string>();
+for (const id of fontesN.keys()) nomesFonte.set(id, (await getEntry('fontes', id))!.data.fonte);
+---
+<div class="rr" data-tabs={modo === 'completo' ? '' : undefined} data-ruler data-modo={modo}>
+  {modo === 'resumo' && (
+    <ol class="rr-lista lista-limpa" aria-label="Linha do tempo da reforma tributária">
+      {marcos.map((m) => (
+        <li class="rr-item" data-de={m.de} data-ate={m.ate}>
+          <span class="rr-aqui" aria-hidden="true">você está aqui</span>
+          <span class="rr-aqui-sr sr-only"></span>
+          <span class="rr-ano">{m.rotulo}</span>
+          <span class="rr-resumo">{m.resumo}<SourceNote id={m.fonteId} n={fontesN.get(m.fonteId)!} /></span>
+        </li>
+      ))}
+    </ol>
+  )}
+
+  {modo === 'completo' && (
+    <>
+      <div class="rr-tabs" role="tablist" aria-label="Linha do tempo da reforma tributária">
+        {marcos.map((m, i) => (
+          <button
+            type="button" role="tab" class="rr-tab" id={`${uid}-t-${m.id}`} aria-controls={`${uid}-p-${m.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'} data-de={m.de} data-ate={m.ate} tabindex={i === 0 ? 0 : -1}
+          >
+            <span class="rr-aqui" aria-hidden="true">você está aqui</span>
+            <span class="rr-ano">{m.rotulo}</span>
+            <span class="rr-resumo">{m.resumo}</span>
+            <span class="sr-only rr-aqui-sr"></span>
+          </button>
+        ))}
+      </div>
+
+      {marcos.map((m) => (
+        <section class="rr-painel" role="tabpanel" id={`${uid}-p-${m.id}`} aria-labelledby={`${uid}-t-${m.id}`} tabindex="0">
+          <h3 class="rr-h">{m.rotulo}</h3>
+          <dl class="rr-dl">
+            <div>
+              <dt>O que muda</dt>
+              <dd>{m.muda}</dd>
+            </div>
+            <div>
+              <dt>O que fazer</dt>
+              <dd>{m.fazer}</dd>
+            </div>
+            <div>
+              <dt>Fonte</dt>
+              <dd>{nomesFonte.get(m.fonteId)}<SourceNote id={m.fonteId} n={fontesN.get(m.fonteId)!} /></dd>
+            </div>
+          </dl>
+        </section>
+      ))}
+    </>
+  )}
+</div>
+
+<style>
+  /* Resumo (Home): lista estática, sem abas */
+  .rr-lista { display: grid; grid-template-columns: 1fr; border: var(--borda) solid var(--linha); background: var(--superficie); }
+  @media (min-width: 48rem) { .rr-lista { grid-template-columns: repeat(4, 1fr); } }
+  .rr-item { position: relative; padding: var(--e4) var(--e2) var(--e2); border-bottom: var(--borda) solid var(--linha); }
+  .rr-item:last-child { border-bottom: 0; }
+  @media (min-width: 48rem) { .rr-item { border-bottom: 0; border-right: var(--borda) solid var(--linha); } .rr-item:last-child { border-right: 0; } }
+  .rr-item.aqui { background: var(--marca-texto); color: var(--grafite); }
+  .rr-item.aqui :global(.fn-btn) { color: var(--grafite); }
+
+  /* Completo: abas */
+  .rr-tabs { display: grid; grid-template-columns: 1fr; border: var(--borda) solid var(--linha); }
+  @media (min-width: 48rem) {
+    .rr-tabs { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
+  }
+  .rr-tab {
+    all: unset; cursor: pointer; box-sizing: border-box; position: relative; padding: var(--e4) var(--e2) var(--e2);
+    border-bottom: var(--borda) solid var(--linha); background: var(--superficie); color: var(--fg); display: block;
+  }
+  @media (min-width: 48rem) { .rr-tab { border-bottom: 0; border-right: var(--borda) solid var(--linha); } .rr-tab:last-child { border-right: 0; } }
+  .rr-tab:focus-visible { outline: 3px solid var(--foco, var(--grafite)); outline-offset: -3px; }
+  .rr-tab[aria-selected='true'] { background: var(--marca-texto); color: var(--grafite); }
+  .rr-ano { display: block; font-family: var(--fonte-display); font-weight: 900; font-stretch: 62%; font-size: clamp(2rem, 4vw, 3rem); line-height: 1; }
+  .rr-resumo { display: block; margin-top: var(--e1); font-family: var(--fonte-mono); font-size: var(--t-rotulo); }
+  .rr-aqui {
+    display: none; position: absolute; top: var(--e1); left: var(--e2); font-family: var(--fonte-mono); font-size: 0.6875rem;
+    letter-spacing: 0.08em; text-transform: uppercase; border: var(--borda) solid currentColor; padding: 0 0.4em;
+  }
+  .aqui .rr-aqui { display: inline-block; }
+  .rr-painel { border: var(--borda) solid var(--linha); border-top: 0; padding: var(--e3); background: var(--superficie); }
+  @media (min-width: 48rem) { .rr-painel { padding: var(--e4); } }
+  .rr-h { font-size: 2rem; margin-bottom: var(--e2); }
+  .rr-dl { margin: 0; display: grid; gap: var(--e2); }
+  .rr-dl dt { font-family: var(--fonte-mono); font-size: var(--t-rotulo); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+  .rr-dl dd { margin: 0; max-width: 46rem; }
+  :global(html:not(.js)) .rr-tabs { display: none; }
+  :global(html:not(.js)) .rr-painel { border-top: var(--borda) solid var(--linha); margin-bottom: var(--e2); }
+</style>
+
+<script>
+  import { iniciarAbas } from '../scripts/tabs';
+
+  document.querySelectorAll<HTMLElement>('[data-ruler]').forEach((raiz) => {
+    const marcos = Array.from(raiz.querySelectorAll<HTMLElement>('[data-de]'));
+    const completo = raiz.dataset.modo === 'completo';
+    const ano = new Date().getFullYear();
+    // "você está aqui": 2026 a 2033; depois de 2033, marca o último marco
+    let aqui = marcos.findIndex((a) => ano >= Number(a.dataset.de) && ano <= Number(a.dataset.ate));
+    if (aqui < 0 && ano > Number(marcos[marcos.length - 1].dataset.ate)) aqui = marcos.length - 1;
+    if (aqui >= 0) {
+      marcos[aqui].classList.add('aqui');
+      marcos[aqui].querySelector('.rr-aqui-sr')!.textContent = ', você está aqui';
+      if (completo) marcos.forEach((a, i) => a.setAttribute('aria-selected', String(i === aqui)));
+    }
+    if (completo) iniciarAbas(raiz);
+  });
+</script>

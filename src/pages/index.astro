@@ -1,0 +1,342 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import BigNumber from '../components/BigNumber.astro';
+import Highlight from '../components/Highlight.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import NumberStrip from '../components/NumberStrip.astro';
+import SamplePanel from '../components/SamplePanel.astro';
+import PlanTable from '../components/PlanTable.astro';
+import FatorRCalculator from '../components/FatorRCalculator.astro';
+import ReformRuler from '../components/ReformRuler.astro';
+import Steps from '../components/Steps.astro';
+import FAQ from '../components/FAQ.astro';
+import Testimonials from '../components/Testimonials.astro';
+import CTASection from '../components/CTASection.astro';
+import { faq } from '../data/faq';
+import { etapasResumo } from '../data/migracao';
+
+import fotoHero from '../assets/fotos/hero.jpg';
+import fotoMesa from '../assets/fotos/mesa.jpg';
+import fotoGraficos from '../assets/fotos/equipe-graficos.jpg';
+import fotoPlanejamento from '../assets/fotos/planejamento.jpg';
+import fotoCelular from '../assets/fotos/celular.jpg';
+import fotoEquipe from '../assets/fotos/equipe-mesa.jpg';
+import fotoCafe from '../assets/fotos/cafe.jpg';
+
+const strip = (h: string) => h.replace(/<[^>]+>/g, '');
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AccountingService',
+    name: 'Razão Contabilidade',
+    slogan: 'Todo número tem uma razão.',
+    description: 'Contabilidade consultiva digital em Campinas (SP) para PMEs de serviços e tecnologia.',
+    url: Astro.site!.toString(),
+    areaServed: 'BR',
+    address: { '@type': 'PostalAddress', addressLocality: 'Campinas', addressRegion: 'SP', addressCountry: 'BR' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.pergunta,
+      acceptedAnswer: { '@type': 'Answer', text: strip(f.resposta) },
+    })),
+  },
+];
+
+const pilares = [
+  { n: '01', titulo: 'Em dia', texto: 'Guias, obrigações e prazos cumpridos sem você precisar cobrar.', foto: fotoMesa },
+  { n: '02', titulo: 'Explicado', texto: 'Cada número do mês vem com um comentário sobre o que ele significa.', foto: fotoGraficos },
+  { n: '03', titulo: 'Planejado', texto: 'O plano de transição da reforma entra no seu calendário, ano a ano.', foto: fotoPlanejamento },
+];
+
+const comparacao = [
+  { item: 'Guias e balancetes', razao: true, outros: true },
+  { item: 'Painel mensal com 5 indicadores comentados, até o 8º dia útil', razao: true, outros: false },
+  { item: 'Plano de transição para a Reforma Tributária, 2026–2033', razao: true, outros: false },
+];
+---
+<Base
+  titulo="Razão Contabilidade · Todo número tem uma razão"
+  descricao="Contabilidade consultiva digital em Campinas para PMEs de serviços e tecnologia. Painel Razão mensal e plano de transição para a Reforma Tributária."
+  schema={schema}
+>
+  <!-- 1. Hero -->
+  <section class="sec sec-papel hero" data-hero data-hero-cta aria-labelledby="h1">
+    <div class="container hero-grid">
+      <div class="hero-txt">
+        <p class="kicker hero-kicker">CONTABILIDADE CONSULTIVA · CAMPINAS · DIGITAL</p>
+        <h1 id="h1" class="hero-h1">Todo número da sua empresa tem uma <Highlight>razão</Highlight>. Até 2033, mais do que nunca.</h1>
+        <p class="apoio hero-apoio">A Reforma Tributária muda o jeito de pagar imposto até 2033. A Razão cuida da sua contabilidade, explica cinco números por mês e monta o plano da sua empresa para a transição.</p>
+        <div class="btn-grupo hero-ctas">
+          <a class="btn btn--primario" href="/contato">Agendar diagnóstico gratuito</a>
+          <a class="btn btn--sec" href="/reforma-tributaria">Ver a linha do tempo da reforma</a>
+        </div>
+        <div class="stats-bloco">
+          <p class="stats-rotulo" id="stats-rotulo">Nosso compromisso</p>
+          <ul class="stats lista-limpa" aria-labelledby="stats-rotulo">
+            <li><BigNumber tamanho="xs" valor="8º" contar={{ ate: 8, sufixo: 'º' }}><span class="stat-t">dia útil para o Painel</span></BigNumber></li>
+            <li><BigNumber tamanho="xs" valor="1"><span class="stat-t">dia útil de resposta</span></BigNumber></li>
+            <li><BigNumber tamanho="xs" valor="30" contar={{ ate: 30 }}><span class="stat-t">dias de migração</span></BigNumber></li>
+            <li><BigNumber tamanho="xs" valor="1"><span class="stat-t">contador responsável</span></BigNumber></li>
+          </ul>
+        </div>
+      </div>
+      <div class="hero-foto">
+        <div class="foto">
+          <Image src={fotoHero} alt="" widths={[480, 800, 1200]} sizes="(min-width: 64rem) 40vw, 92vw" loading="eager" fetchpriority="high" format="webp" />
+        </div>
+        <div class="hero-card sec-tinta">
+          <BigNumber tamanho="m" valor="2033" contar={{ de: 2026, ate: 2033 }} fonte={{ id: 'reforma-2033', n: '1' }} />
+          <p class="hero-card-t">modelo completo da reforma</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Proposta: três pilares -->
+  <section class="sec sec-papel" aria-labelledby="h-proposta">
+    <div class="container">
+      <SectionHeader titulo="Você não precisa de mais arquivos. Precisa de **cinco números** explicados." id="h-proposta">
+        <p>Toda contabilidade entrega guias e balancetes. A Razão entrega também uma página, até o 8º dia útil, com faturamento, margem, carga tributária efetiva, caixa e provisões, e o que cada um significa para as suas decisões.</p>
+      </SectionHeader>
+      <ul class="cards3 lista-limpa">
+        {pilares.map((p) => (
+          <li class="pilar">
+            <div class="pilar-topo">
+              <span class="pilar-n" aria-hidden="true">{p.n}</span>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </div>
+            <div class="foto foto--16x10"><Image src={p.foto} alt="" widths={[400, 700]} sizes="(min-width: 64rem) 30vw, 92vw" format="webp" /></div>
+          </li>
+        ))}
+      </ul>
+      <div class="btn-grupo btn-grupo--centro">
+        <a class="btn btn--primario" href="/contato">Agendar diagnóstico gratuito</a>
+        <a class="btn btn--sec" href="/painel">Explorar o Painel</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Comparação -->
+  <section class="sec sec-papel sec--compacta" aria-labelledby="h-comp-tab">
+    <div class="container split split--topo">
+      <div>
+        <h2 id="h-comp-tab">O que a <Highlight>Razão</Highlight> entrega além de guias e balancetes.</h2>
+      </div>
+      <div class="tabela-wrap">
+        <table class="comparar">
+          <caption class="sr-only">Comparação entre a Razão e uma contabilidade só de obrigações</caption>
+          <thead>
+            <tr><th scope="col"><span class="sr-only">Item</span></th><th scope="col" class="col-razao">Razão</th><th scope="col" class="col-outros">Só obrigações</th></tr>
+          </thead>
+          <tbody>
+            {comparacao.map((c) => (
+              <tr>
+                <th scope="row">{c.item}</th>
+                <td class="col-razao"><span aria-hidden="true">✓</span><span class="sr-only">Incluso</span></td>
+                <td class="col-outros">{c.outros ? <><span aria-hidden="true">✓</span><span class="sr-only">Incluso</span></> : <><span aria-hidden="true">–</span><span class="sr-only">Não incluso</span></>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Painel -->
+  <section class="sec sec-tinta" aria-labelledby="h-painel">
+    <div class="container split split--topo">
+      <div>
+        <h2 id="h-painel">Cinco números. <Highlight>Uma página.</Highlight> Todo mês.</h2>
+        <div class="btn-grupo">
+          <a class="btn btn--primario" href="/painel">Explorar o Painel</a>
+        </div>
+      </div>
+      <SamplePanel quantidade={1} previa />
+    </div>
+  </section>
+
+  <!-- 5. Faixa de números -->
+  <section class="sec sec-grafite" aria-labelledby="h-numeros">
+    <div class="container">
+      <SectionHeader titulo="Quatro números que **já afetam** a sua empresa" id="h-numeros" />
+      <NumberStrip />
+      <div class="btn-grupo">
+        <a class="btn btn--primario" href="/reforma-tributaria">Entender o que muda para mim</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Calculadora -->
+  <section class="sec sec-papel" aria-labelledby="h-calc">
+    <div class="container split split--topo">
+      <SectionHeader titulo={'<span class="calc-big">**28%.**</span> Você sabe o seu?'} id="h-calc">
+        <p>Se sua empresa de serviços está no Simples, a razão entre folha e faturamento pode mudar o anexo e a alíquota. Informe dois números e veja.</p>
+      </SectionHeader>
+      <FatorRCalculator id="home" />
+    </div>
+  </section>
+
+  <!-- 7. Reforma -->
+  <section class="sec sec-grafite" aria-labelledby="h-reforma">
+    <div class="container">
+      <SectionHeader titulo="A reforma não está chegando. Ela começou em **2026**." id="h-reforma" />
+      <ReformRuler modo="resumo" inicioN={6} />
+      <div class="btn-grupo">
+        <a class="btn btn--primario" href="/contato">Agendar diagnóstico da reforma</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Planos -->
+  <section class="sec sec-papel" aria-labelledby="h-servicos">
+    <div class="container">
+      <SectionHeader titulo="Três planos. **Preço publicado.** Sem letra miúda." id="h-servicos" />
+      <PlanTable />
+      <p class="nota-pequena">Preços são hipóteses do projeto conceitual.</p>
+      <div class="btn-grupo">
+        <a class="btn btn--primario" href="/servicos">Comparar planos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Compromissos -->
+  <section class="sec sec-tinta" aria-labelledby="h-comp">
+    <div class="container split">
+      <div class="foto-wrap">
+        <div class="foto foto--4x3"><Image src={fotoCelular} alt="" widths={[480, 800, 1000]} sizes="(min-width: 64rem) 45vw, 92vw" format="webp" /></div>
+      </div>
+      <div>
+        <SectionHeader titulo="O que está no **contrato**" id="h-comp">
+          <p>Não mostramos números de clientes ou de economia. Mostramos o que nos comprometemos a cumprir.</p>
+        </SectionHeader>
+        <ul class="comp lista-limpa">
+          <li><BigNumber valor="8º" tamanho="m" contar={{ ate: 8, sufixo: 'º' }} rotulo="nosso compromisso"><p class="comp-t">dia útil para o Painel</p></BigNumber></li>
+          <li><BigNumber valor="1" tamanho="m" rotulo="nosso compromisso"><p class="comp-t">dia útil de resposta</p></BigNumber></li>
+          <li><BigNumber valor="30" tamanho="m" contar={{ ate: 30 }} rotulo="nosso compromisso"><p class="comp-t">dias de migração</p></BigNumber></li>
+          <li><BigNumber valor="1" tamanho="m" rotulo="nosso compromisso"><p class="comp-t">contador responsável</p></BigNumber></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Migração -->
+  <section class="sec sec-papel" aria-labelledby="h-mig">
+    <div class="container split split--inv">
+      <div>
+        <SectionHeader titulo="Trocar de contador é um **processo**, não um salto." id="h-mig" />
+        <Steps etapas={etapasResumo} />
+        <div class="btn-grupo">
+          <a class="btn btn--sec" href="/migracao">Ver como funciona a migração</a>
+        </div>
+      </div>
+      <div class="foto-wrap">
+        <div class="foto foto--4x3"><Image src={fotoEquipe} alt="" widths={[480, 800, 1000]} sizes="(min-width: 64rem) 45vw, 92vw" format="webp" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Quem responde -->
+  <section class="sec sec-papel" aria-labelledby="h-quem">
+    <div class="container split split--topo">
+      <div>
+        <h2 id="h-quem">Quem <Highlight>responde</Highlight> pela sua contabilidade</h2>
+        <p class="apoio">Fotos, nomes, CRC, CNPJ e endereço entram aqui quando forem definidos.</p>
+        <p><span class="placeholder">[CNPJ]</span> <span class="placeholder">[endereço em Campinas, SP]</span></p>
+      </div>
+      <ul class="pessoas lista-limpa">
+        {[1, 2, 3].map(() => (
+          <li class="pessoa"><span class="placeholder">[foto]</span><span class="placeholder">[nome]</span><span class="placeholder">[CRC]</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Testimonials itens={[]} />
+
+  <!-- 12. FAQ -->
+  <section class="sec sec-tinta" aria-labelledby="h-faq">
+    <div class="container split split--inv">
+      <div>
+        <SectionHeader titulo="Perguntas **frequentes**" id="h-faq" />
+        <FAQ itens={faq} />
+      </div>
+      <div class="foto-wrap">
+        <div class="foto foto--3x4"><Image src={fotoCafe} alt="" widths={[480, 800, 1000]} sizes="(min-width: 64rem) 40vw, 92vw" format="webp" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. CTA final -->
+  <CTASection />
+</Base>
+
+<style>
+  /* Hero: texto à esquerda, foto com canto curvo à direita */
+  .hero { min-height: calc(100svh - var(--header-h)); display: flex; align-items: center; padding-block: var(--e4) var(--e6); }
+  .hero-grid { display: grid; gap: var(--e4); grid-template-columns: 1fr; width: 100%; }
+  .hero-kicker { font-size: 0.6875rem; letter-spacing: 0.04em; }
+  @media (min-width: 40rem) { .hero-kicker { font-size: var(--t-rotulo); letter-spacing: 0.08em; } }
+  .hero-h1 { font-size: clamp(2.125rem, 7.5vw, 4rem); max-width: 16ch; margin-bottom: var(--e2); }
+  .hero-apoio { font-size: 1rem; line-height: 1.5; max-width: 34rem; }
+  .hero-ctas { margin-top: var(--e3); gap: var(--e1); }
+  .hero-ctas .btn { flex: 1 1 14rem; }
+  /* Compromissos: caixa única, rótulo em cima, quatro colunas separadas por linha */
+  .stats-bloco { margin-top: var(--e5); padding: var(--e3); background: var(--superficie); border-radius: var(--raio-card); }
+  .stats-rotulo { margin: 0 0 var(--e2); font-family: var(--fonte-mono); font-size: var(--t-rotulo); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--e3) 0; }
+  .stats li { padding-inline: var(--e2); border-left: var(--borda) solid var(--linha); }
+  .stats li:nth-child(odd) { border-left: 0; padding-left: 0; }
+  @media (min-width: 40rem) {
+    .stats { grid-template-columns: repeat(4, 1fr); }
+    .stats li:nth-child(odd) { border-left: var(--borda) solid var(--linha); padding-left: var(--e2); }
+    .stats li:first-child { border-left: 0; padding-left: 0; }
+  }
+  .stat-t { display: block; margin-top: 0.375rem; font-size: var(--t-pequeno); line-height: 1.35; color: var(--fg-2); }
+  .hero-foto { position: relative; }
+  .hero-foto :global(.foto) { aspect-ratio: 4 / 3; border: 0; border-top-left-radius: 6rem; }
+  .hero-card {
+    position: absolute; left: var(--e2); bottom: var(--e2); z-index: 2; background: var(--marca-texto); color: var(--grafite);
+    padding: var(--e2) var(--e3); border-radius: 1.25rem; --fg: var(--grafite); --fg-2: var(--grafite);
+  }
+  .hero-card :global(.bn) { font-size: clamp(3rem, 7vw, 4.5rem); }
+  .hero-card-t { margin: var(--e1) 0 0; font-family: var(--fonte-mono); font-size: var(--t-rotulo); text-transform: uppercase; letter-spacing: 0.06em; }
+  @media (min-width: 64rem) {
+    .hero { padding-block: var(--e4) var(--e6); }
+    .hero-h1 { font-size: clamp(2.75rem, 3.9vw, 3.5rem); }
+    .hero-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); column-gap: var(--e10); align-items: center; }
+    .hero-foto :global(.foto) { aspect-ratio: 4 / 5; border-top-left-radius: 12rem; }
+    .hero-foto :global(img) { object-position: 58% 30%; }
+  }
+
+  /* Pilares: cartão em Papel com o texto em cima e a foto embaixo */
+  .pilar { background: var(--superficie); border-radius: var(--raio-card); overflow: hidden; display: flex; flex-direction: column; }
+  .pilar-topo { padding: var(--e3); flex: 1; }
+  .pilar-n { display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--marca-texto); font-family: var(--fonte-mono); font-size: var(--t-rotulo); font-weight: 500; margin-bottom: var(--e2); }
+  .pilar h3 { font-size: 1.5rem; margin-bottom: var(--e1); }
+  .pilar p { color: var(--fg-2); margin: 0; }
+  .pilar .foto { border: 0; border-radius: 0; }
+
+  /* Comparação */
+  .sec--compacta { padding-block: var(--e6) var(--e8); }
+  .comparar { font-family: var(--fonte-texto); font-size: 1rem; }
+  .comparar th, .comparar td { padding: var(--e2); vertical-align: middle; }
+  .comparar tbody th { font-weight: 500; }
+  .comparar thead th { font-family: var(--fonte-display); font-size: 1.125rem; text-transform: none; letter-spacing: 0; color: var(--fg); }
+  .col-razao { text-align: center; background: var(--grafite); color: var(--marca-texto); font-weight: 700; }
+  .comparar thead .col-razao { color: var(--papel); }
+  .col-outros { text-align: center; color: var(--fg-2); }
+  .comparar tbody .col-razao { border-top-color: var(--linha-escura); }
+
+  .nota-pequena { margin-top: var(--e2); font-family: var(--fonte-mono); font-size: var(--t-rotulo); color: var(--fg-2); }
+  .comp { display: grid; gap: var(--e4); grid-template-columns: repeat(2, 1fr); }
+  .comp-t { margin: var(--e1) 0 0; }
+  .pessoas { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e2); }
+  .pessoa { aspect-ratio: 3 / 4; border: 1px dashed var(--linha); border-radius: var(--raio-card); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--e1); padding: var(--e2); background: var(--superficie); font-size: var(--t-pequeno); }
+  @media (max-width: 30rem) { .pessoas { grid-template-columns: 1fr; } .pessoa { aspect-ratio: auto; min-height: 6rem; } }
+  :global(.calc-big) { display: inline; }
+</style>

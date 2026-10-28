@@ -1,0 +1,120 @@
+---
+import { planos, comparativo } from '../data/planos';
+
+interface Props {
+  /** resumo: cartões (Home). completo: tabela comparativa (/servicos) */
+  modo?: 'resumo' | 'completo';
+}
+const { modo = 'resumo' } = Astro.props;
+---
+{modo === 'resumo' ? (
+  <ul class="pl-cards lista-limpa">
+    {planos.map((p) => (
+      <li class:list={['pl-card', { 'pl-card--destaque sec-grafite': p.etiqueta }]}>
+        {p.etiqueta && (
+          <p class="pl-etq">
+            <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 1.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L10 14.9l-5.2 2.8 1-5.9L1.5 7.7l5.9-.8z" /></svg>
+            {p.etiqueta}
+          </p>
+        )}
+        <h3 class="pl-nome">{p.nome}</h3>
+        <p class="pl-para">{p.para}</p>
+        <p class="pl-preco">{p.preco}</p>
+        <p class="pl-sufixo">{p.sufixo ?? 'valor definido após o diagnóstico'}</p>
+        <ul class="pl-itens lista-limpa">
+          {p.itens.map((i) => (
+            <li>
+              <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="9.25" /><path d="M5.8 10.4l2.9 2.9 5.5-6" /></svg>
+              <span>{i}</span>
+            </li>
+          ))}
+        </ul>
+        <a class="btn pl-btn" href="/contato">{p.botao}</a>
+      </li>
+    ))}
+  </ul>
+) : (
+  <div class="tabela-wrap" tabindex="0" role="region" aria-label="Comparativo dos planos">
+    <table class="comp-tab">
+      <caption>Preços e escopo são hipóteses do projeto conceitual.</caption>
+      <thead>
+        <tr>
+          <th scope="col"><span class="sr-only">Entrega</span></th>
+          {planos.map((p) => <th scope="col" class:list={{ 'col-dest': !!p.etiqueta }}>{p.nome}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="linha-preco">
+          <th scope="row">Preço</th>
+          {planos.map((p) => <td class:list={{ 'col-dest': !!p.etiqueta }}>{p.id === 'estrategia' ? p.preco : `a partir de ${p.preco}/mês`}</td>)}
+        </tr>
+        {comparativo.map((c) => (
+          <tr>
+            <th scope="row">{c.item}</th>
+            {[c.base, c.gestao, c.estrategia].map((ok, i) => (
+              <td class:list={{ 'col-dest': i === 1 }}>
+                {ok ? <><span class="tick" aria-hidden="true">✓</span><span class="sr-only">Incluso</span></> : <><span aria-hidden="true">–</span><span class="sr-only">Não incluso</span></>}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+
+<style>
+  /* Cartões */
+  .pl-cards { display: grid; gap: var(--e6) var(--e3); grid-template-columns: 1fr; border: 0 !important; border-radius: 0 !important; overflow: visible !important; align-items: stretch; margin-top: var(--e10); }
+  @media (min-width: 64rem) { .pl-cards { grid-template-columns: repeat(3, 1fr); gap: var(--e3); } }
+  .pl-card {
+    position: relative; display: flex; flex-direction: column; padding: var(--e4) var(--e4); background: var(--superficie);
+    border: var(--borda) solid var(--linha); border-radius: var(--raio-card);
+  }
+  .pl-card--destaque {
+    background-color: var(--grafite); background-image: none; color: var(--papel); border: 2px solid var(--marca-texto);
+    padding-top: var(--e8);
+  }
+  @media (min-width: 64rem) { .pl-card--destaque { margin-block: calc(var(--e3) * -1); padding-block: var(--e8) var(--e5); } }
+
+  .pl-etq {
+    position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); width: max-content; max-width: calc(100% - var(--e3));
+    display: inline-flex; align-items: center; gap: 0.5rem; margin: 0; padding: 0.625rem 1.25rem; border-radius: var(--raio-btn);
+    background: var(--marca-texto); color: var(--grafite); border: 2px solid var(--grafite);
+    font-family: var(--fonte-texto); font-weight: 800; font-size: 0.9375rem; line-height: 1.2; text-align: center;
+  }
+  .pl-etq svg { width: 1.125rem; height: 1.125rem; flex: none; fill: var(--grafite); }
+
+  .pl-nome { font-size: 1.625rem; margin-bottom: var(--e1); }
+  .pl-para { margin: 0 0 var(--e3); color: var(--fg-2); min-height: 3em; }
+  .pl-card--destaque .pl-para { color: var(--texto-2-escuro); }
+  .pl-preco { font-family: var(--fonte-display); font-weight: 800; font-size: clamp(2.5rem, 4vw, 3.25rem); letter-spacing: -0.03em; line-height: 1; margin: 0; }
+  .pl-card--destaque .pl-preco { color: var(--marca-texto); }
+  .pl-sufixo { margin: var(--e1) 0 var(--e3); font-family: var(--fonte-mono); font-size: var(--t-rotulo); text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-2); }
+  .pl-card--destaque .pl-sufixo { color: var(--texto-2-escuro); }
+
+  .pl-itens { display: grid; gap: 0.875rem; padding-top: var(--e3); border-top: var(--borda) solid var(--linha); margin-bottom: var(--e4); flex: 1; align-content: start; }
+  .pl-card--destaque .pl-itens { border-top-color: var(--linha-escura); }
+  .pl-itens li { display: grid; grid-template-columns: 1.25rem 1fr; gap: 0.75rem; align-items: start; font-size: 1rem; line-height: 1.45; }
+  .pl-itens svg { width: 1.25rem; height: 1.25rem; margin-top: 0.1rem; }
+  .pl-itens circle { fill: var(--marca-texto); stroke: var(--grafite); stroke-width: 1; }
+  .pl-itens path { fill: none; stroke: var(--grafite); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+  .pl-btn { width: 100%; background: var(--grafite); color: var(--papel); border-color: var(--grafite); font-size: 1rem; min-height: 3.25rem; }
+  .pl-btn:hover { background: var(--marca-texto); color: var(--grafite); border-color: var(--grafite); }
+  .pl-card--destaque .pl-btn { background: var(--marca-texto); color: var(--grafite); border-color: var(--marca-texto); }
+  .pl-card--destaque .pl-btn:hover { background: var(--branco); border-color: var(--branco); }
+
+  /* Tabela comparativa */
+  .comp-tab { font-family: var(--fonte-texto); font-size: 1rem; }
+  .comp-tab th, .comp-tab td { padding: var(--e2); vertical-align: middle; }
+  .comp-tab thead th { font-family: var(--fonte-display); font-size: 1.125rem; text-transform: none; letter-spacing: 0; color: var(--fg); text-align: center; }
+  .comp-tab thead th:first-child { text-align: left; }
+  .comp-tab tbody th { font-weight: 500; }
+  .comp-tab td { text-align: center; color: var(--fg-2); }
+  .comp-tab .linha-preco th, .comp-tab .linha-preco td { font-weight: 700; color: var(--fg); }
+  .comp-tab .col-dest { background: var(--grafite); color: var(--papel); border-top-color: var(--linha-escura); font-weight: 700; }
+  .comp-tab thead .col-dest { color: var(--marca-texto); }
+  .tick { font-weight: 800; }
+  .col-dest .tick { color: var(--marca-texto); }
+</style>

@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import PageHero from '../components/PageHero.astro';
+import SamplePanel from '../components/SamplePanel.astro';
+import CTASection from '../components/CTASection.astro';
+
+const trilha = [{ nome: 'Painel Razão', href: '/painel' }];
+const indicadores = [
+  ['Faturamento', 'O que a empresa faturou no mês e como isso se compara com o mês anterior.'],
+  ['Margem', 'O que sobra do faturamento depois dos custos e despesas.'],
+  ['Carga tributária efetiva', 'Quanto do faturamento foi para tributos.'],
+  ['Caixa', 'O dinheiro disponível no fim do mês.'],
+  ['Provisões', 'Valores que já são devidos, como férias e 13º, mesmo sem terem sido pagos.'],
+];
+---
+<Base
+  titulo="Painel Razão: exemplo com dados fictícios · Razão"
+  descricao="Veja um Painel Razão de exemplo: cinco indicadores comentados, entregues até o 8º dia útil. Dados fictícios."
+  trilha={trilha}
+>
+  <PageHero kicker="PAINEL RAZÃO" titulo="Este é o **relatório** que você vai querer abrir." trilha={trilha}>
+    <p>Três meses de uma empresa fictícia. Troque de mês e leia os comentários.</p>
+  </PageHero>
+
+  <section class="sec sec-grafite" aria-labelledby="h-exemplo">
+    <div class="container">
+      <h2 id="h-exemplo" class="sr-only">Exemplo de Painel</h2>
+      <SamplePanel quantidade={3} />
+    </div>
+  </section>
+
+  <section class="sec sec-papel" aria-labelledby="h-ind">
+    <div class="container prosa">
+      <h2 id="h-ind">Os <Highlight>cinco</Highlight> indicadores</h2>
+      <dl>
+        {indicadores.map(([n, d]) => <><dt><strong>{n}</strong></dt><dd>{d}</dd></>)}
+      </dl>
+      <p>O Painel chega até o 8º dia útil de cada mês. Esse é o nosso compromisso.</p>
+    </div>
+  </section>
+  <CTASection />
+</Base>
+
+<style>
+  dd { margin: 0 0 var(--e2); color: var(--fg-2); }
+</style>

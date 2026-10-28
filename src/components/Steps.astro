@@ -1,0 +1,50 @@
+---
+interface Etapa {
+  titulo: string;
+  texto?: string;
+  responsavel?: string;
+  prazo?: string;
+}
+interface Props {
+  etapas: Etapa[];
+  /** Home: etapas em linha, só os títulos */
+  compacto?: boolean;
+}
+const { etapas, compacto = false } = Astro.props;
+---
+<ol class:list={['steps lista-limpa', { compacto }]}>
+  {etapas.map((e, i) => (
+    <li class="step">
+      <span class="step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+      <div>
+        <h3>{e.titulo}</h3>
+        {e.texto && <p>{e.texto}</p>}
+        {(e.responsavel || e.prazo) && (
+          <p class="step-meta">
+            {e.responsavel && <span>Responsável: {e.responsavel}</span>}
+            {e.prazo && <span>Prazo: {e.prazo}</span>}
+          </p>
+        )}
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .steps { border-top: var(--borda) solid var(--linha); }
+  .step { display: grid; grid-template-columns: 4rem 1fr; gap: var(--e2); padding: var(--e3) 0; border-bottom: var(--borda) solid var(--linha); }
+  .step-n { font-family: var(--fonte-display); font-weight: 900; font-stretch: 62%; font-size: 2.5rem; line-height: 1; }
+  .step h3 { margin-bottom: var(--e1); }
+  .step p { margin: 0; color: var(--fg-2); }
+  .compacto { display: grid; grid-template-columns: 1fr; border-top: 0; border: var(--borda) solid var(--linha); background: var(--superficie); }
+  @media (min-width: 64rem) { .compacto { grid-template-columns: repeat(5, 1fr); } }
+  .compacto .step { grid-template-columns: 2.5rem 1fr; padding: var(--e2); border-bottom: var(--borda) solid var(--linha); align-items: start; }
+  .compacto .step:last-child { border-bottom: 0; }
+  @media (min-width: 64rem) {
+    .compacto .step { grid-template-columns: 1fr; border-bottom: 0; border-right: var(--borda) solid var(--linha); }
+    .compacto .step:last-child { border-right: 0; }
+  }
+  .compacto .step-n { font-size: 1.75rem; }
+  .compacto h3 { font-size: 1.0625rem; margin: 0; }
+  .step-meta { display: flex; flex-wrap: wrap; gap: var(--e1) var(--e3); margin-top: var(--e1) !important; font-family: var(--fonte-mono); font-size: var(--t-rotulo); }
+</style>

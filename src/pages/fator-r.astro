@@ -1,0 +1,64 @@
+---
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import PageHero from '../components/PageHero.astro';
+import FatorRCalculator from '../components/FatorRCalculator.astro';
+import SourceNote from '../components/SourceNote.astro';
+import GlossaryTerm from '../components/GlossaryTerm.astro';
+import CTASection from '../components/CTASection.astro';
+
+const trilha = [{ nome: 'Fator R', href: '/fator-r' }];
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Fator R: dois números que podem mudar seu imposto no Simples',
+    dateModified: '2026-10-26',
+    inLanguage: 'pt-BR',
+    author: { '@type': 'Organization', name: 'Razão Contabilidade' },
+    publisher: { '@type': 'Organization', name: 'Razão Contabilidade' },
+  },
+];
+---
+<Base
+  titulo="Fator R no Simples Nacional: calculadora · Razão"
+  descricao="Calcule o Fator R: folha de 12 meses dividida pela receita bruta de 12 meses. Com 28% ou mais, atividades sujeitas ao Fator R ficam no Anexo III."
+  trilha={trilha}
+  schema={schema}
+>
+  <PageHero kicker="FATOR R" titulo="Fator R: **dois números** que podem mudar seu imposto no Simples." trilha={trilha}>
+    <p>Informe a folha e a receita dos últimos 12 meses e veja o resultado na hora.</p>
+  </PageHero>
+
+  <section class="sec sec-papel sec--sem-grade" aria-labelledby="h-calc">
+    <div class="container">
+      <h2 id="h-calc" class="sr-only">Calculadora</h2>
+      <FatorRCalculator id="pg" />
+    </div>
+  </section>
+
+  <section class="sec sec-papel" aria-labelledby="h-como">
+    <div class="container prosa">
+      <h2 id="h-como">Como <Highlight>funciona</Highlight></h2>
+      <p>O Fator R é a folha de pagamento dos 12 meses anteriores dividida pela receita bruta dos mesmos 12 meses.<SourceNote id="fator-r" n="1" /></p>
+      <ul>
+        <li>Resultado de 28% ou mais: atividades sujeitas ao <GlossaryTerm termo="Fator R" definicao="Razão entre folha de salários e receita bruta, ambas dos últimos 12 meses." /> são tributadas pelo Anexo III.</li>
+        <li>Resultado abaixo de 28%: essas atividades são tributadas pelo Anexo V.</li>
+      </ul>
+
+      <h2>O que entra na <Highlight>folha</Highlight></h2>
+      <p>Em geral: salários, retiradas de pró-labore e encargos, como INSS patronal e FGTS. Confirme o conceito exato com o seu contador.<SourceNote id="folha-definicao" n="2" /></p>
+
+      <h2><Highlight>Limitações</Highlight> da calculadora</h2>
+      <ul>
+        <li>Ela não verifica o seu CNAE. Só algumas atividades estão sujeitas ao Fator R.</li>
+        <li>Ela usa os dois números que você informa. Se a folha ou a receita estiverem incompletas, o resultado também estará.</li>
+        <li>Ela mostra o anexo, não a alíquota efetiva nem o imposto a pagar.</li>
+        <li>Empresas com menos de 12 meses de atividade precisam de tratamento específico.</li>
+      </ul>
+      <p>O diagnóstico gratuito de 30 minutos olha esses pontos com os seus números reais.</p>
+      <div class="btn-grupo"><a class="btn btn--primario" href="/contato">Agendar diagnóstico gratuito</a></div>
+    </div>
+  </section>
+  <CTASection />
+</Base>

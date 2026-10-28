@@ -1,0 +1,137 @@
+---
+interface Props {
+  /** id único se houver mais de uma calculadora na página */
+  id?: string;
+}
+const { id = 'fr' } = Astro.props;
+---
+<div class="calc" data-fator-r>
+  <form class="calc-form" novalidate>
+    <div class="campo">
+      <label for={`${id}-folha`}>Folha de pagamento dos últimos 12 meses (R$)</label>
+      <input id={`${id}-folha`} name="folha" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 840.000,00" aria-describedby={`${id}-ajuda`} />
+    </div>
+    <div class="campo">
+      <label for={`${id}-receita`}>Receita bruta dos últimos 12 meses (R$)</label>
+      <input id={`${id}-receita`} name="receita" type="text" inputmode="decimal" autocomplete="off" placeholder="ex.: 3.500.000,00" aria-describedby={`${id}-ajuda`} />
+    </div>
+    <p id={`${id}-ajuda`} class="calc-ajuda">Use vírgula ou ponto nos centavos. Pode digitar com ou sem separador de milhar.</p>
+    <button type="submit" class="btn btn--primario">Calcular Fator R</button>
+  </form>
+
+  <div class="calc-saida" aria-live="polite" aria-atomic="true" data-saida>
+    <p class="calc-vazio">Informe os dois valores e calcule.</p>
+  </div>
+
+  <p class="calc-aviso">Estimativa educativa. Não substitui análise do seu CNAE e da sua folha.</p>
+</div>
+
+<style>
+  .calc { border: var(--borda) solid var(--linha); background: var(--superficie); padding: var(--e3); max-width: 44rem; }
+  @media (min-width: 48rem) { .calc { padding: var(--e4); } }
+  .campo { margin-bottom: var(--e3); }
+  label { display: block; font-family: var(--fonte-mono); font-size: var(--t-rotulo); letter-spacing: 0.04em; margin-bottom: var(--e1); }
+  input {
+    width: 100%; min-height: 3rem; padding: 0.5rem var(--e2); border: var(--borda) solid var(--fg); border-radius: var(--raio);
+    background: transparent; color: var(--fg); font-family: var(--fonte-mono); font-size: 1rem;
+  }
+  input[aria-invalid='true'] { border-color: var(--negativo); border-width: 2px; }
+  .calc-ajuda { font-size: var(--t-pequeno); color: var(--fg-2); }
+  .calc-saida { margin-top: var(--e4); min-height: 4rem; border-top: var(--borda) solid var(--linha); padding-top: var(--e3); }
+  .calc-vazio { color: var(--fg-2); margin: 0; }
+  .calc-aviso { margin: var(--e3) 0 0; font-family: var(--fonte-mono); font-size: var(--t-rotulo); color: var(--fg-2); }
+  :global(.calc-pct) {
+    display: block; font-family: var(--fonte-display); font-weight: 900; font-stretch: 62%; font-variation-settings: 'wdth' 62;
+    font-size: clamp(4rem, 14vw, 7rem); line-height: 0.9;
+  }
+  :global(.calc-anexo) { font-family: var(--fonte-display); font-weight: 800; font-size: 1.5rem; margin: var(--e2) 0 var(--e1); }
+  :global(.calc-erro) { color: var(--negativo); font-weight: 500; margin: 0; }
+  :global(.calc-nota) { color: var(--fg-2); font-size: var(--t-pequeno); }
+</style>
+
+<script>
+  import { calcularFatorR, formatarPercentual, lerNumero } from '../lib/fatorR';
+
+  const reduzir = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const brl = (n: number) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+
+  document.querySelectorAll<HTMLElement>('[data-fator-r]').forEach((raiz) => {
+    const form = raiz.querySelector<HTMLFormElement>('form')!;
+    const saida = raiz.querySelector<HTMLElement>('[data-saida]')!;
+    const folhaEl = form.elements.namedItem('folha') as HTMLInputElement;
+    const receitaEl = form.elements.namedItem('receita') as HTMLInputElement;
+
+    const erro = (msg: string, campo?: HTMLInputElement) => {
+      form.querySelectorAll('input').forEach((i) => i.removeAttribute('aria-invalid'));
+      campo?.setAttribute('aria-invalid', 'true');
+      saida.innerHTML = '';
+      const p = document.createElement('p');
+      p.className = 'calc-erro';
+      p.textContent = msg;
+      saida.append(p);
+      campo?.focus();
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      form.querySelectorAll('input').forEach((i) => i.removeAttribute('aria-invalid'));
+      const folha = lerNumero(folhaEl.value);
+      const receita = lerNumero(receitaEl.value);
+      if (Number.isNaN(folha)) return erro('Informe a folha dos últimos 12 meses.', folhaEl);
+      if (Number.isNaN(receita)) return erro('Informe a receita bruta dos últimos 12 meses.', receitaEl);
+      const r = calcularFatorR(folha, receita);
+      if (!r.ok) {
+        if (r.motivo === 'receita-zero') return erro('A receita bruta precisa ser maior que zero para calcular a razão.', receitaEl);
+        return erro('Use valores positivos.', folhaEl);
+      }
+
+      const texto = formatarPercentual(r.percentual);
+      const anexo =
+        r.anexo === 'III'
+          ? 'Anexo III, para atividades sujeitas ao Fator R'
+          : 'Anexo V, para atividades sujeitas ao Fator R';
+      const falta = r.anexo === 'V' ? receita * 0.28 - folha : 0;
+      const nota =
+        r.anexo === 'V'
+          ? `Com a mesma receita, a folha dos 12 meses teria de ser de ${brl(receita * 0.28)} para chegar a 28%. Hoje faltam ${brl(falta)}.`
+          : 'Acima de 28%, a atividade sujeita ao Fator R é tributada pelo Anexo III. A razão é recalculada todo mês.';
+      const href = `/contato?fator=${(Math.floor(r.percentual * 10 + 1e-9) / 10).toFixed(1)}`;
+
+      saida.innerHTML = '';
+      // Texto final para leitor de tela; o número visual conta de 0 até o valor.
+      const sr = document.createElement('p');
+      sr.className = 'sr-only';
+      sr.textContent = `Seu Fator R é ${texto}%. ${anexo}.`;
+      const pct = document.createElement('span');
+      pct.className = 'calc-pct';
+      pct.setAttribute('aria-hidden', 'true');
+      pct.textContent = `${texto}%`;
+      const an = document.createElement('p');
+      an.className = 'calc-anexo';
+      an.setAttribute('aria-hidden', 'true');
+      an.textContent = anexo;
+      const nt = document.createElement('p');
+      nt.className = 'calc-nota';
+      nt.textContent = nota;
+      const cta = document.createElement('a');
+      cta.className = 'btn btn--primario';
+      cta.href = href;
+      cta.textContent = 'Levar meu resultado para o diagnóstico';
+      saida.append(sr, pct, an, nt, cta);
+
+      if (!reduzir) {
+        const dur = 900;
+        const ini = performance.now();
+        const alvo = Math.floor(r.percentual * 10 + 1e-9) / 10;
+        const passo = (t: number) => {
+          const p = Math.min((t - ini) / dur, 1);
+          const v = alvo * (1 - Math.pow(1 - p, 3));
+          pct.textContent = `${formatarPercentual(v)}%`;
+          if (p < 1) requestAnimationFrame(passo);
+          else pct.textContent = `${texto}%`;
+        };
+        requestAnimationFrame(passo);
+      }
+    });
+  });
+</script>

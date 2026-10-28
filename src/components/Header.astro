@@ -1,0 +1,76 @@
+---
+const itens = [
+  { href: '/', rotulo: 'Início' },
+  { href: '/servicos', rotulo: 'Serviços' },
+  { href: '/reforma-tributaria', rotulo: 'Reforma' },
+  { href: '/fator-r', rotulo: 'Fator R' },
+  { href: '/painel', rotulo: 'Painel' },
+  { href: '/sobre', rotulo: 'Sobre' },
+];
+const atual = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class="hdr sec-papel" data-header>
+  <div class="hdr-bar">
+    <a class="logo" href="/" aria-label="Razão Contabilidade, página inicial">
+      <span class="logo-nome">Razão</span><span class="logo-ponto" aria-hidden="true"></span>
+      <span class="logo-sub">Contabilidade</span>
+    </a>
+    <button type="button" class="menu-btn" aria-expanded="false" aria-controls="nav-principal" data-menu-btn>
+      <span class="sr-only">Menu</span><span aria-hidden="true" class="menu-ico"></span>
+    </button>
+    <nav id="nav-principal" class="nav" aria-label="Principal" data-nav>
+      <ul class="lista-limpa nav-lista">
+        {itens.map((i) => (
+          <li><a href={i.href} aria-current={atual === i.href ? 'page' : undefined}>{i.rotulo}</a></li>
+        ))}
+      </ul>
+      <a class="btn btn--primario nav-cta" href="/contato">Agendar diagnóstico</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Barra flutuante: retângulo de cantos arredondados com sombra leve */
+  .hdr { position: sticky; top: 0; z-index: 50; padding: 0.75rem var(--e2); pointer-events: none; }
+  .hdr-bar {
+    pointer-events: auto; position: relative; display: flex; align-items: center; justify-content: space-between;
+    width: 100%; max-width: var(--largura); margin-inline: auto; min-height: 4rem; padding: 0.5rem 0.75rem 0.5rem var(--e3);
+    background: var(--branco); border: var(--borda) solid var(--linha-clara); border-radius: 1.5rem;
+    box-shadow: 0 8px 28px rgba(18, 20, 18, 0.1), 0 1px 3px rgba(18, 20, 18, 0.06);
+    transition: min-height 200ms, box-shadow 200ms;
+  }
+  :global(.hdr.is-compact) .hdr-bar { min-height: 3.5rem; box-shadow: 0 10px 32px rgba(18, 20, 18, 0.14), 0 1px 3px rgba(18, 20, 18, 0.08); }
+  .logo { display: inline-flex; align-items: baseline; gap: 0.35rem; text-decoration: none; color: var(--grafite); }
+  .logo-nome { font-family: var(--fonte-display); font-weight: 900; font-size: 1.75rem; letter-spacing: -0.03em; }
+  .logo-ponto { width: 0.6rem; height: 0.6rem; background: var(--marca-texto); border-radius: 50%; display: inline-block; outline: 1px solid var(--grafite); outline-offset: -1px; }
+  .logo-sub { font-family: var(--fonte-mono); font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--texto-2-claro); }
+  .nav { display: flex; align-items: center; gap: var(--e4); }
+  .nav-lista { display: flex; gap: var(--e3); align-items: center; }
+  .nav-lista a { text-decoration: none; font-weight: 500; font-size: 0.9375rem; padding: 0.5rem 0; border-bottom: 2px solid transparent; }
+  .nav-lista a:hover, .nav-lista a[aria-current='page'] { border-bottom-color: var(--grafite); }
+  .nav-cta { min-height: 2.75rem; padding-block: 0.4rem; }
+  .menu-btn { display: none; }
+
+  @media (max-width: 64rem) {
+    .hdr-bar { padding-left: var(--e2); }
+    .menu-btn {
+      display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 50%;
+      background: transparent; color: var(--grafite); border: var(--borda) solid var(--linha-clara); cursor: pointer;
+    }
+    .menu-ico, .menu-ico::before, .menu-ico::after { display: block; width: 1.25rem; height: 2px; background: var(--grafite); position: relative; }
+    .menu-ico::before, .menu-ico::after { content: ''; position: absolute; left: 0; }
+    .menu-ico::before { top: -6px; }
+    .menu-ico::after { top: 6px; }
+    :global(html.js) .nav { display: none; }
+    :global(html.js) .nav.aberto {
+      display: flex; flex-direction: column; align-items: stretch; position: absolute; top: calc(100% + 0.5rem); left: 0; right: 0;
+      background: var(--branco); border: var(--borda) solid var(--linha-clara); border-radius: 1.5rem; padding: var(--e2); gap: var(--e2);
+      box-shadow: 0 8px 28px rgba(18, 20, 18, 0.12);
+    }
+    :global(html.js) .nav.aberto .nav-lista { flex-direction: column; align-items: stretch; gap: 0; }
+    :global(html.js) .nav.aberto .nav-lista a { display: block; padding: 0.875rem 0; border-bottom: var(--borda) solid var(--linha-clara); }
+    :global(html:not(.js)) .nav { flex-wrap: wrap; }
+    :global(html:not(.js)) .hdr-bar { flex-wrap: wrap; }
+  }
+  @media (max-width: 40rem) { .logo-sub { display: none; } }
+</style>

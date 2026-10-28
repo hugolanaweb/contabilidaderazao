@@ -1,0 +1,39 @@
+---
+import { getEntry } from 'astro:content';
+
+interface Props {
+  /** id em src/content/fontes.json */
+  id: string;
+  /** número exibido na nota, ex.: "1" */
+  n: string;
+}
+
+const { id, n } = Astro.props;
+const entrada = await getEntry('fontes', id);
+if (!entrada) throw new Error(`SourceNote: fonte "${id}" não existe em fontes.json`);
+const f = entrada.data;
+
+const popId = `fn-${id}-${n}-${Math.random().toString(36).slice(2, 7)}`;
+const data = f.conferidoEm ? new Date(`${f.conferidoEm}T12:00:00`).toLocaleDateString('pt-BR') : null;
+const aviso =
+  f.status === 'oficial'
+    ? null
+    : f.status === 'secundaria'
+      ? 'Conferido em fontes secundárias. Reconferir no texto oficial antes do deploy.'
+      : 'Conferência em fonte oficial pendente.';
+---
+<span class="fn">
+  <button type="button" class="fn-btn" popovertarget={popId} aria-label={`Ver fonte ${n}: ${f.rotulo}`} title="Clique para ver a fonte"><span class="fn-ic" aria-hidden="true">i</span>Fonte {n}</button>
+  <div id={popId} popover="auto" class="fn-pop" role="dialog" aria-label={`Fonte ${n}`}>
+    <dl>
+      <dt>Dado</dt>
+      <dd>{f.rotulo}: {f.valor}</dd>
+      <dt>Fonte</dt>
+      <dd><a href={f.url} rel="noopener" target="_blank">{f.fonte}</a></dd>
+      <dt>Conferido em</dt>
+      <dd>{data ?? 'ainda não conferido'}</dd>
+    </dl>
+    {aviso && <p class="fn-aviso">{aviso}</p>}
+    <button type="button" class="btn btn--sec fn-fechar" popovertarget={popId} popovertargetaction="hide">Fechar</button>
+  </div>
+</span>

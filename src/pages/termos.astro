@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import PageHero from '../components/PageHero.astro';
+
+const trilha = [{ nome: 'Termos', href: '/termos' }];
+---
+<Base
+  titulo="Termos de uso · Razão Contabilidade"
+  descricao="Termos de uso deste site. Rascunho de projeto conceitual."
+  trilha={trilha}
+>
+  <PageHero kicker="LEGAL" titulo="Termos de **uso**" trilha={trilha}>
+    <p>Rascunho de projeto conceitual. <span class="placeholder">[texto jurídico a ser revisado por profissional antes de qualquer uso real]</span></p>
+  </PageHero>
+
+  <section class="sec sec-papel" aria-labelledby="h-uso">
+    <div class="container prosa">
+      <h2 id="h-uso">Empresa <Highlight>fictícia</Highlight></h2>
+      <p>Este site é um projeto conceitual de marca e website para uma empresa fictícia. Não oferece serviços reais.</p>
+      <h2>Conteúdo <Highlight>informativo</Highlight></h2>
+      <p>Textos, linha do tempo da reforma e calculadora têm finalidade educativa. A calculadora do Fator R é uma estimativa e não substitui a análise do seu CNAE e da sua folha. Não há promessa de economia de tributos.</p>
+      <h2>Dados de <Highlight>exemplo</Highlight></h2>
+      <p>O Painel Razão exibe dados fictícios da "Empresa Exemplo Ltda.".</p>
+      <h2>Fontes <Highlight>legais</Highlight></h2>
+      <p>Valores legais trazem fonte e data de conferência. Eles devem ser reconferidos em fonte oficial antes de qualquer decisão.</p>
+    </div>
+  </section>
+</Base>

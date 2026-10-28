@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import PageHero from '../components/PageHero.astro';
+import Steps from '../components/Steps.astro';
+import CTASection from '../components/CTASection.astro';
+import { etapasCompletas, checklist } from '../data/migracao';
+
+const trilha = [{ nome: 'Migração', href: '/migracao' }];
+---
+<Base
+  titulo="Migração de contabilidade em até 30 dias · Razão"
+  descricao="Como trocar de contador em até 30 dias: cinco etapas, responsável e prazo de cada uma, e o checklist de documentos."
+  trilha={trilha}
+>
+  <PageHero kicker="MIGRAÇÃO" titulo="Trocar de contador em até **30 dias**, sem perder nenhum prazo." trilha={trilha}>
+    <p>Cinco etapas, cada uma com responsável e prazo.</p>
+  </PageHero>
+
+  <section class="sec sec-papel" aria-labelledby="h-etapas">
+    <div class="container">
+      <h2 id="h-etapas" class="sr-only">Etapas</h2>
+      <Steps etapas={etapasCompletas.map((e) => ({ ...e, prazo: e.prazo }))} />
+    </div>
+  </section>
+
+  <section class="sec sec-papel" aria-labelledby="h-check">
+    <div class="container prosa">
+      <h2 id="h-check"><Highlight>Checklist</Highlight> de documentos</h2>
+      <ul class="lista-limpa">
+        {checklist.map((c, i) => (
+          <li class="item"><input type="checkbox" id={`c${i}`} /><label for={`c${i}`}>{c}</label></li>
+        ))}
+      </ul>
+      <p class="nota">A lista final depende do seu caso e do escritório atual. Ela é confirmada na proposta.</p>
+    </div>
+  </section>
+  <CTASection />
+</Base>
+
+<style>
+  .item { display: grid; grid-template-columns: 1.5rem 1fr; gap: var(--e1); align-items: start; padding: var(--e1) 0; border-bottom: var(--borda) solid var(--linha); }
+  .item input { width: 1.5rem; height: 1.5rem; margin: 0; accent-color: var(--grafite); }
+  .nota { margin-top: var(--e2); color: var(--fg-2); font-size: var(--t-pequeno); }
+</style>

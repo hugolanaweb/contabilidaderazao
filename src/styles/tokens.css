@@ -1,0 +1,89 @@
+:root {
+  /* Cor */
+  --grafite: #121412;
+  --grafite-2: #1e211e;
+  --papel: #f3f1ea;
+  --branco: #ffffff;
+  --verde: #2f6b4f;
+  --marca-texto: #ddff2e;
+  --texto-2-claro: #5b605a;
+  --texto-2-escuro: #a3a89f;
+  --linha-escura: #2e332e;
+  --linha-clara: #d9d6cc;
+  --negativo-escuro: #ff6b5e;
+  --negativo-claro: #b42f25;
+  --positivo-escuro: #7fd8a8;
+  --positivo-claro: #2f6b4f;
+
+  /* Espaçamento base 8 px */
+  --e1: 0.5rem;
+  --e2: 1rem;
+  --e3: 1.5rem;
+  --e4: 2rem;
+  --e5: 2.5rem;
+  --e6: 3rem;
+  --e8: 4rem;
+  --e10: 5rem;
+  --e12: 6rem;
+  --e16: 8rem;
+  --e20: 10rem;
+
+  --raio: 0.75rem;
+  --raio-2: 2px;
+  --raio-card: 1.5rem;
+  --raio-btn: 999px;
+  --borda: 1px;
+  --grade: 8px;
+
+  /* Tipografia */
+  --fonte-display: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --fonte-texto: 'IBM Plex Sans', system-ui, sans-serif;
+  --fonte-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --t-big: clamp(6rem, 18vw, 16rem);
+  --t-h1: clamp(2.5rem, 6vw, 4.5rem);
+  --t-h2: clamp(2rem, 4vw, 3rem);
+  --t-corpo: 1.0625rem;
+  --t-pequeno: 0.875rem;
+  --t-rotulo: 0.8125rem;
+
+  --largura: 72rem;
+  --header-h: 5.75rem;
+  --header-h-menor: 5rem;
+}
+
+/* Contextos de cor: cada seção declara se é grafite ou papel */
+.sec-grafite {
+  --bg: var(--grafite);
+  --fg: var(--papel);
+  --fg-2: var(--texto-2-escuro);
+  --linha: var(--linha-escura);
+  --superficie: var(--grafite-2);
+  --negativo: var(--negativo-escuro);
+  --positivo: var(--positivo-escuro);
+  --destaque-texto: var(--marca-texto);
+}
+
+.sec-papel {
+  --bg: var(--branco);
+  --fg: var(--grafite);
+  --fg-2: var(--texto-2-claro);
+  --linha: var(--linha-clara);
+  --superficie: var(--papel);
+  --negativo: var(--negativo-claro);
+  --positivo: var(--positivo-claro);
+  /* Marca-texto nunca vira cor de texto sobre fundo claro */
+  --destaque-texto: var(--grafite);
+}
+
+/* Faixa em Papel, com cartões brancos */
+.sec-tinta {
+  --bg: var(--papel);
+  --fg: var(--grafite);
+  --fg-2: var(--texto-2-claro);
+  --linha: var(--linha-clara);
+  --superficie: var(--branco);
+  --negativo: var(--negativo-claro);
+  --positivo: var(--positivo-claro);
+  --destaque-texto: var(--grafite);
+}

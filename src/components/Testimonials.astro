@@ -1,0 +1,20 @@
+---
+// Oculto até existirem depoimentos reais e autorizados. Nunca preencher com texto inventado.
+interface Props {
+  itens?: { texto: string; autor: string; cargo: string }[];
+}
+const { itens = [] } = Astro.props;
+---
+{itens.length > 0 && (
+  <section class="sec sec-papel" aria-labelledby="dep-titulo">
+    <div class="container">
+      <h2 id="dep-titulo">Depoimentos</h2>
+      {itens.map((i) => (
+        <figure>
+          <blockquote>{i.texto}</blockquote>
+          <figcaption>{i.autor}, {i.cargo}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+)}

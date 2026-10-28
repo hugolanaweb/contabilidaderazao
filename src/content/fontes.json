@@ -1,0 +1,73 @@
+[
+  {
+    "id": "folha-definicao",
+    "rotulo": "O que conta como folha no Fator R",
+    "valor": "salários, pró-labore e encargos",
+    "fonte": "Lei Complementar nº 123/2006, art. 18 (conceito de folha de salários para o Fator R)",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm",
+    "conferidoEm": null,
+    "status": "pendente"
+  },  {
+    "id": "simples-limite",
+    "rotulo": "Limite anual do Simples Nacional",
+    "valor": "R$ 4.800.000,00",
+    "fonte": "Lei Complementar nº 123/2006, art. 3º, II (redação da LC 155/2016)",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm",
+    "conferidoEm": "2026-10-26",
+    "status": "oficial"
+  },
+  {
+    "id": "fator-r",
+    "rotulo": "Fator R de 28%",
+    "valor": "28%",
+    "fonte": "Lei Complementar nº 123/2006, art. 18, §§ 5º-J, 5º-K e 5º-M",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp123.htm",
+    "conferidoEm": "2026-10-26",
+    "status": "oficial"
+  },
+  {
+    "id": "reforma-5-para-2",
+    "rotulo": "Cinco tributos sobre consumo viram dois",
+    "valor": "5 → 2",
+    "fonte": "Emenda Constitucional nº 132/2023 (CBS e IBS no lugar de PIS, Cofins, IPI, ICMS e ISS)",
+    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc132.htm",
+    "conferidoEm": null,
+    "status": "pendente"
+  },
+  {
+    "id": "reforma-2026",
+    "rotulo": "2026: ano de teste",
+    "valor": "CBS 0,9% e IBS 0,1%",
+    "fonte": "Lei Complementar nº 214/2025, disposições transitórias",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm",
+    "conferidoEm": "2026-10-26",
+    "status": "secundaria"
+  },
+  {
+    "id": "reforma-2027",
+    "rotulo": "2027: CBS no lugar de PIS e Cofins",
+    "valor": "2027",
+    "fonte": "Lei Complementar nº 214/2025, disposições transitórias",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm",
+    "conferidoEm": "2026-10-26",
+    "status": "secundaria"
+  },
+  {
+    "id": "reforma-2029-2032",
+    "rotulo": "2029 a 2032: IBS sobe, ICMS e ISS descem",
+    "valor": "IBS 10/20/30/40% · ICMS e ISS 90/80/70/60%",
+    "fonte": "Lei Complementar nº 214/2025, disposições transitórias",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm",
+    "conferidoEm": "2026-10-26",
+    "status": "secundaria"
+  },
+  {
+    "id": "reforma-2033",
+    "rotulo": "2033: modelo completo",
+    "valor": "2033",
+    "fonte": "Lei Complementar nº 214/2025 e Emenda Constitucional nº 132/2023",
+    "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm",
+    "conferidoEm": "2026-10-26",
+    "status": "secundaria"
+  }
+]

@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import PageHero from '../components/PageHero.astro';
+
+const trilha = [{ nome: 'Privacidade', href: '/privacidade' }];
+---
+<Base
+  titulo="Política de Privacidade · Razão Contabilidade"
+  descricao="Como este site trata dados pessoais. Rascunho de projeto conceitual."
+  trilha={trilha}
+>
+  <PageHero kicker="LEGAL" titulo="Política de **Privacidade**" trilha={trilha}>
+    <p>Rascunho de projeto conceitual. <span class="placeholder">[texto jurídico a ser revisado por profissional antes de qualquer uso real]</span></p>
+  </PageHero>
+
+  <section class="sec sec-papel" aria-labelledby="h-dados">
+    <div class="container prosa">
+      <h2 id="h-dados">Dados que o formulário <Highlight>coleta</Highlight></h2>
+      <p>Nome, e-mail, WhatsApp, faixa de faturamento, regime atual e, se você usou a calculadora, o seu Fator R. Neste projeto de estudo, o formulário é fictício e nenhum dado é enviado.</p>
+      <h2>Para que <Highlight>servem</Highlight></h2>
+      <p>Retornar o contato e preparar o diagnóstico solicitado.</p>
+      <h2>Base <Highlight>legal</Highlight></h2>
+      <p>Consentimento, marcado no formulário.</p>
+      <h2>Cookies e <Highlight>análise</Highlight></h2>
+      <p>Este site não usa cookies de rastreamento. <span class="placeholder">[ferramenta de análise sem cookies, se adotada]</span></p>
+      <h2>Seus <Highlight>direitos</Highlight></h2>
+      <p>Você pode pedir acesso, correção ou exclusão dos seus dados. <span class="placeholder">[canal do encarregado de dados]</span></p>
+      <h2><Highlight>Controlador</Highlight></h2>
+      <p><span class="placeholder">[razão social, CNPJ e endereço]</span></p>
+    </div>
+  </section>
+</Base>

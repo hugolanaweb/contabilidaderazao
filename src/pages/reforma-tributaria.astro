@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import ReformRuler from '../components/ReformRuler.astro';
+import CTASection from '../components/CTASection.astro';
+
+const trilha = [{ nome: 'Reforma Tributária', href: '/reforma-tributaria' }];
+const fontes = await getCollection('fontes');
+const ultima = fontes.map((f) => f.data.conferidoEm).filter((d): d is string => !!d).sort().at(-1)!;
+const dataBr = new Date(`${ultima}T12:00:00`).toLocaleDateString('pt-BR');
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'De 2026 a 2033, ano a ano: o que muda para empresas de serviços',
+    dateModified: ultima,
+    inLanguage: 'pt-BR',
+    author: { '@type': 'Organization', name: 'Razão Contabilidade' },
+    publisher: { '@type': 'Organization', name: 'Razão Contabilidade' },
+  },
+];
+---
+<Base
+  titulo="Reforma Tributária 2026–2033 para empresas de serviços · Razão"
+  descricao="Linha do tempo ano a ano da transição para CBS e IBS: o que muda, o que fazer e a fonte de cada dado."
+  trilha={trilha}
+  schema={schema}
+>
+  <PageHero kicker="REFORMA TRIBUTÁRIA" titulo="De 2026 a 2033, **ano a ano**: o que muda para empresas de serviços." trilha={trilha}>
+    <p>Use as setas do teclado para percorrer os anos. Cada ano mostra o que muda, o que fazer e a fonte.</p>
+  </PageHero>
+
+  <section class="sec sec-grafite" aria-labelledby="h-regua">
+    <div class="container">
+      <p class="data-atualizacao">Atualizado em <time datetime={ultima}>{dataBr}</time>. Valores conferidos conforme a nota de cada fonte.</p>
+      <h2 id="h-regua" class="sr-only">Linha do tempo</h2>
+      <ReformRuler modo="completo" />
+    </div>
+  </section>
+  <CTASection />
+</Base>

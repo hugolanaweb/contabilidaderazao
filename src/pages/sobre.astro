@@ -1,0 +1,180 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import CTASection from '../components/CTASection.astro';
+import fotoHero from '../assets/fotos/equipe-graficos.jpg';
+import fotoNao from '../assets/fotos/planejamento.jpg';
+
+const trilha = [{ nome: 'Sobre', href: '/sobre' }];
+
+const metodo = [
+  { n: '01', titulo: 'Obrigações em dia', texto: 'Guias, prazos e obrigações cumpridos todo mês, sem você precisar cobrar.' },
+  { n: '02', titulo: 'Painel Razão', texto: 'Cinco indicadores comentados, entregues até o 8º dia útil, com o que cada um significa para as suas decisões.' },
+  { n: '03', titulo: 'Plano de transição', texto: 'Um plano para a Reforma Tributária, de 2026 a 2033, ano a ano.' },
+];
+
+const valores = [
+  { n: 'Clareza', texto: 'Um número só vale se alguém explicar o que ele significa.' },
+  { n: 'Prazo', texto: 'Painel até o 8º dia útil e resposta em 1 dia útil.' },
+  { n: 'Responsabilidade', texto: 'Um contador responsável pela sua empresa, do começo ao fim.' },
+];
+
+const naoFazemos = [
+  { titulo: 'Não prometemos economia de imposto', texto: 'Garantimos o cálculo correto. Se houver caminho para mudar o enquadramento, mostramos os números e você decide.' },
+  { titulo: 'Não usamos alarmismo', texto: 'A reforma é longa e gradual. Explicamos o que muda, em que ano e o que fazer.' },
+  { titulo: 'Não exibimos números de clientes nem de desempenho', texto: 'Mostramos o que nos comprometemos a cumprir.' },
+];
+---
+<Base
+  titulo="Sobre a Razão Contabilidade"
+  descricao="Contadores que preferem explicar a impressionar. Método, valores e o que a Razão não faz."
+  trilha={trilha}
+>
+  <!-- Hero -->
+  <section class="sec sec-tinta sobre-hero" data-hero aria-labelledby="h1">
+    <div class="container sobre-grid">
+      <div>
+        <nav class="crumbs" aria-label="Trilha de navegação">
+          <ol class="lista-limpa">
+            <li><a href="/">Início</a></li>
+            <li><span aria-current="page">Sobre</span></li>
+          </ol>
+        </nav>
+        <p class="kicker">SOBRE</p>
+        <h1 id="h1" class="sobre-h1">Contadores que preferem <Highlight>explicar</Highlight> a impressionar.</h1>
+        <p class="apoio sobre-apoio">Empresa fictícia de um projeto conceitual de marca e website. Aqui, a contabilidade serve para a empresa decidir melhor, não para acumular papel.</p>
+        <div class="btn-grupo">
+          <a class="btn btn--primario" href="/contato">Agendar diagnóstico gratuito</a>
+          <a class="btn btn--sec" href="/painel">Ver o Painel Razão</a>
+        </div>
+      </div>
+      <div class="sobre-foto">
+        <div class="foto">
+          <Image src={fotoHero} alt="" widths={[480, 800, 1200]} sizes="(min-width: 64rem) 40vw, 92vw" loading="eager" fetchpriority="high" format="webp" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Método -->
+  <section class="sec sec-papel" aria-labelledby="h-metodo">
+    <div class="container">
+      <header class="sh">
+        <p class="kicker">MÉTODO</p>
+        <h2 id="h-metodo">Todo mês, a mesma rotina. <Highlight>Sem surpresa.</Highlight></h2>
+        <p class="apoio">Cada empresa recebe as obrigações em dia, o Painel Razão e um plano de transição para 2026–2033.</p>
+      </header>
+      <ol class="metodo lista-limpa">
+        {metodo.map((m) => (
+          <li class="metodo-card">
+            <span class="metodo-n" aria-hidden="true">{m.n}</span>
+            <h3>{m.titulo}</h3>
+            <p>{m.texto}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Valores -->
+  <section class="sec sec-grafite" aria-labelledby="h-valores">
+    <div class="container">
+      <header class="sh">
+        <p class="kicker">VALORES</p>
+        <h2 id="h-valores">O que <Highlight>guia</Highlight> o nosso trabalho.</h2>
+      </header>
+      <ul class="valores lista-limpa">
+        {valores.map((v) => (
+          <li class="valor">
+            <h3>{v.n}</h3>
+            <p>{v.texto}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- O que não fazemos -->
+  <section class="sec sec-papel" aria-labelledby="h-nao">
+    <div class="container split split--inv">
+      <div>
+        <header class="sh">
+          <p class="kicker">LIMITES</p>
+          <h2 id="h-nao">O que <Highlight>não fazemos.</Highlight></h2>
+        </header>
+        <ul class="nao lista-limpa">
+          {naoFazemos.map((n) => (
+            <li class="nao-item">
+              <span class="nao-x" aria-hidden="true">×</span>
+              <div>
+                <h3>{n.titulo}</h3>
+                <p>{n.texto}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="foto-wrap">
+        <div class="foto foto--3x4"><Image src={fotoNao} alt="" widths={[480, 800, 1000]} sizes="(min-width: 64rem) 40vw, 92vw" format="webp" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quem responde -->
+  <section class="sec sec-tinta" aria-labelledby="h-quem">
+    <div class="container split split--topo">
+      <div>
+        <p class="kicker">EQUIPE</p>
+        <h2 id="h-quem">Quem <Highlight>responde</Highlight> pela sua contabilidade.</h2>
+        <p class="apoio">Responsáveis, fotos, CRC e CNPJ entram aqui quando forem definidos.</p>
+        <p><span class="placeholder">[CNPJ]</span> <span class="placeholder">[CRC]</span></p>
+      </div>
+      <ul class="pessoas lista-limpa">
+        {[1, 2, 3].map(() => (
+          <li class="pessoa"><span class="placeholder">[foto]</span><span class="placeholder">[nome]</span><span class="placeholder">[CRC]</span></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <CTASection />
+</Base>
+
+<style>
+  .sobre-hero { padding-block: var(--e6) var(--e8); }
+  .sobre-grid { display: grid; gap: var(--e5); grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 64rem) { .sobre-grid { grid-template-columns: 1.1fr 0.9fr; gap: var(--e10); } }
+  .crumbs ol { display: flex; flex-wrap: wrap; gap: var(--e1); font-family: var(--fonte-mono); font-size: var(--t-rotulo); margin-bottom: var(--e4); color: var(--fg-2); }
+  .crumbs li + li::before { content: '/'; margin-right: var(--e1); }
+  .sobre-h1 { font-size: clamp(2.5rem, 5vw, 4rem); max-width: 14ch; margin-bottom: var(--e2); }
+  .sobre-apoio { font-size: 1.125rem; max-width: 34rem; }
+  .sobre-foto :global(.foto) { aspect-ratio: 4 / 3; border: 0; border-top-left-radius: 6rem; }
+  @media (min-width: 64rem) { .sobre-foto :global(.foto) { aspect-ratio: 4 / 5; border-top-left-radius: 10rem; } }
+
+  /* Método */
+  .metodo { display: grid; gap: var(--e3); grid-template-columns: 1fr; counter-reset: m; }
+  @media (min-width: 48rem) { .metodo { grid-template-columns: repeat(3, 1fr); } }
+  .metodo-card { background: var(--superficie); border-radius: var(--raio-card); padding: var(--e4); }
+  .metodo-n { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 50%; background: var(--marca-texto); font-family: var(--fonte-display); font-weight: 800; font-size: 1.25rem; margin-bottom: var(--e3); }
+  .metodo-card h3 { font-size: 1.5rem; margin-bottom: var(--e1); }
+  .metodo-card p { margin: 0; color: var(--fg-2); }
+
+  /* Valores */
+  .valores { display: grid; gap: var(--e3); grid-template-columns: 1fr; }
+  @media (min-width: 48rem) { .valores { grid-template-columns: repeat(3, 1fr); } }
+  .valor { background: var(--superficie); border-radius: var(--raio-card); padding: var(--e4); border: var(--borda) solid var(--linha); }
+  .valor h3 { font-family: var(--fonte-display); font-weight: 800; font-size: clamp(1.75rem, 3vw, 2.25rem); letter-spacing: -0.02em; color: var(--marca-texto); margin-bottom: var(--e2); }
+  .valor p { margin: 0; color: var(--fg-2); }
+
+  /* Limites */
+  .nao { display: grid; gap: var(--e2); }
+  .nao-item { display: grid; grid-template-columns: 3rem 1fr; gap: var(--e2); align-items: start; padding: var(--e3); background: var(--superficie); border-radius: var(--raio-card); }
+  .nao-x { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 50%; border: 2px solid var(--grafite); font-family: var(--fonte-display); font-size: 1.75rem; font-weight: 800; line-height: 1; }
+  .nao-item h3 { font-size: 1.125rem; margin-bottom: 0.25rem; }
+  .nao-item p { margin: 0; color: var(--fg-2); font-size: var(--t-pequeno); }
+
+  /* Equipe */
+  .pessoas { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--e2); }
+  .pessoa { aspect-ratio: 3 / 4; border: 1px dashed var(--linha); border-radius: var(--raio-card); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: var(--e1); padding: var(--e2); background: var(--superficie); font-size: var(--t-pequeno); }
+  @media (max-width: 30rem) { .pessoas { grid-template-columns: 1fr; } .pessoa { aspect-ratio: auto; min-height: 6rem; } }
+</style>

@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Highlight from '../components/Highlight.astro';
+import PageHero from '../components/PageHero.astro';
+import PlanTable from '../components/PlanTable.astro';
+import CTASection from '../components/CTASection.astro';
+
+const trilha = [{ nome: 'Serviços', href: '/servicos' }];
+---
+<Base
+  titulo="Serviços e planos · Razão Contabilidade"
+  descricao="Três planos de contabilidade consultiva com preço publicado e projetos avulsos: Diagnóstico Tributário, Plano de Transição da Reforma e Abertura."
+  trilha={trilha}
+>
+  <PageHero kicker="SERVIÇOS" titulo="Escolha pelo tamanho **da sua empresa**, não pelo tamanho da lista." trilha={trilha}>
+    <p>Três planos mensais e três projetos avulsos. O preço está na página.</p>
+  </PageHero>
+
+  <section class="sec sec-papel" aria-labelledby="h-planos">
+    <div class="container">
+      <h2 id="h-planos" class="espaco">Planos <Highlight>mensais</Highlight></h2>
+      <PlanTable modo="completo" />
+    </div>
+  </section>
+
+  <section class="sec sec-papel" aria-labelledby="h-avulsos">
+    <div class="container">
+      <h2 id="h-avulsos" class="espaco">Projetos <Highlight>avulsos</Highlight></h2>
+      <div class="tabela-wrap" role="region" aria-label="Projetos avulsos" tabindex="0">
+        <table>
+          <caption>Preços são hipóteses do projeto conceitual.</caption>
+          <thead><tr><th scope="col">Projeto</th><th scope="col">O que entrega</th><th scope="col">Preço</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Diagnóstico Tributário</th><td>Reunião gratuita de 30 minutos. Relatório escrito é opcional.</td><td>Reunião grátis · relatório a partir de R$ 1.500</td></tr>
+            <tr><th scope="row">Plano de Transição da Reforma</th><td><span class="placeholder">[escopo a definir]</span></td><td>a partir de R$ 4.500</td></tr>
+            <tr><th scope="row">Abertura de empresa</th><td><span class="placeholder">[escopo a definir]</span></td><td>a partir de R$ 990</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="btn-grupo"><a class="btn btn--primario" href="/contato">Agendar diagnóstico gratuito</a></div>
+    </div>
+  </section>
+  <CTASection />
+</Base>
+
+<style>
+  .espaco { margin-bottom: var(--e4); }
+</style>

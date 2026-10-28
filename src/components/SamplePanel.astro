@@ -1,0 +1,83 @@
+---
+import { meses as todos } from '../data/painel';
+
+interface Props {
+  /** quantos meses mostrar (Home: 1 mês; /painel: 3) */
+  quantidade?: number;
+  /** Home: 3 de 5 indicadores e só o comentário da Margem; o resto fica em /painel */
+  previa?: boolean;
+}
+const { quantidade = 3, previa = false } = Astro.props;
+const meses = todos.slice(0, quantidade);
+const sinal = { pos: 'pos', neg: 'neg', neutro: 'neutro' } as const;
+---
+<div class:list={['sp', { 'sp--previa': previa }]} data-tabs data-sample-panel>
+  <div class="sp-topo">
+    <div>
+      <p class="sp-emp">Empresa Exemplo Ltda.</p>
+      <p class="sp-sub">Painel Razão · {previa ? 'prévia' : '5 indicadores comentados'}</p>
+    </div>
+    <span class="sp-selo">dados fictícios</span>
+  </div>
+
+  {meses.length > 1 && (
+    <div class="sp-tabs" role="tablist" aria-label="Mês do Painel">
+      {meses.map((m, i) => (
+        <button type="button" role="tab" class="sp-tab" id={`sp-t-${m.id}`} aria-controls={`sp-p-${m.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{m.rotulo}</button>
+      ))}
+    </div>
+  )}
+
+  {meses.map((m) => (
+    <section class="sp-painel" role="tabpanel" id={`sp-p-${m.id}`} aria-labelledby={meses.length > 1 ? `sp-t-${m.id}` : undefined} aria-label={meses.length > 1 ? undefined : m.rotulo} tabindex="0">
+      <h3 class="sp-mes">{m.rotulo}</h3>
+      <ul class="sp-lista lista-limpa">
+        {m.indicadores.filter((i) => !previa || ['Faturamento', 'Margem', 'Caixa'].includes(i.nome)).map((i) => (
+          <li class="sp-ind">
+            <p class="sp-nome">{i.nome}</p>
+            <p class="sp-valor">{i.valor}</p>
+            <p class={`sp-var sp-${sinal[i.tom]}`}>{i.variacao}</p>
+            {(!previa || i.nome === 'Margem') && <p class="sp-com">{i.comentario}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>
+
+<style>
+  .sp { border: var(--borda) solid var(--linha); background: var(--superficie); }
+  .sp-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--e2); padding: var(--e3); border-bottom: var(--borda) solid var(--linha); }
+  @media (max-width: 30rem) { .sp-topo { flex-direction: column-reverse; align-items: flex-start; } }
+  .sp-emp { font-family: var(--fonte-display); font-weight: 800; font-size: 1.5rem; margin: 0; }
+  .sp-sub { margin: 0; font-family: var(--fonte-mono); font-size: var(--t-rotulo); color: var(--fg-2); }
+  .sp-selo { font-family: var(--fonte-mono); font-size: var(--t-rotulo); text-transform: uppercase; letter-spacing: 0.08em; border: var(--borda) solid var(--marca-texto); background: var(--marca-texto); color: var(--grafite); padding: 0.15rem 0.5rem; white-space: nowrap; }
+  .sp-tabs { display: flex; border-bottom: var(--borda) solid var(--linha); overflow-x: auto; }
+  .sp-tab {
+    all: unset; cursor: pointer; box-sizing: border-box; padding: var(--e2) var(--e3); font-family: var(--fonte-mono); font-size: 0.9375rem;
+    border-right: var(--borda) solid var(--linha); white-space: nowrap; min-height: 3rem; display: flex; align-items: center;
+  }
+  .sp-tab[aria-selected='true'] { background: var(--marca-texto); color: var(--grafite); }
+  .sp-tab:focus-visible { outline: 3px solid var(--foco, var(--grafite)); outline-offset: -3px; }
+  .sp-painel { padding: var(--e3); }
+  .sp-mes { font-size: 1.125rem; font-family: var(--fonte-mono); font-weight: 500; margin-bottom: var(--e2); color: var(--fg-2); }
+  .sp-lista { display: grid; grid-template-columns: 1fr; }
+  @media (min-width: 48rem) { .sp-lista { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 64rem) { .sp-lista { grid-template-columns: repeat(3, 1fr); } }
+  .sp--previa .sp-lista { grid-template-columns: repeat(2, 1fr); }
+  .sp--previa .sp-valor { font-size: clamp(2rem, 3vw, 2.5rem); }
+  .sp-ind { padding: var(--e2) var(--e2) var(--e2) 0; border-top: var(--borda) solid var(--linha); }
+  @media (min-width: 48rem) { .sp-ind { padding-right: var(--e3); } }
+  .sp-nome { font-family: var(--fonte-mono); font-size: var(--t-rotulo); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); margin: 0; }
+  .sp-valor { font-family: var(--fonte-display); font-weight: 900; font-stretch: 62%; font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1; margin: var(--e1) 0 0; }
+  .sp-var { font-family: var(--fonte-mono); font-size: var(--t-pequeno); margin: var(--e1) 0; }
+  .sp-pos { color: var(--positivo); }
+  .sp-neg { color: var(--negativo); }
+  .sp-com { margin: 0; font-size: var(--t-pequeno); line-height: 1.5; }
+  :global(html:not(.js)) .sp-painel + .sp-painel { border-top: var(--borda) solid var(--linha); }
+</style>
+
+<script>
+  import { iniciarAbas } from '../scripts/tabs';
+  document.querySelectorAll<HTMLElement>('[data-sample-panel]').forEach((raiz) => iniciarAbas(raiz));
+</script>

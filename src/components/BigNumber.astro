@@ -1,0 +1,43 @@
+---
+import SourceNote from './SourceNote.astro';
+
+interface Props {
+  /** valor final exibido, ex.: "2033", "28%", "R$ 4,8 mi", "5 → 2" */
+  valor: string;
+  /** se informado, o número conta de 0 até aqui (900 ms) uma vez ao entrar na tela */
+  contar?: { de?: number; ate: number; prefixo?: string; sufixo?: string; casas?: number; separador?: boolean };
+  rotulo?: string;
+  /** "nosso compromisso", "fictício" ou nota de fonte */
+  fonte?: { id: string; n: string };
+  tamanho?: 'g' | 'm' | 's' | 'xs';
+  titulo?: boolean;
+}
+
+const { valor, contar, rotulo, fonte, tamanho = 'm' } = Astro.props;
+const data = contar
+  ? {
+      'data-count': String(contar.ate),
+      'data-from': String(contar.de ?? 0),
+      'data-prefix': contar.prefixo ?? '',
+      'data-suffix': contar.sufixo ?? '',
+      'data-decimals': String(contar.casas ?? 0),
+      'data-group': contar.separador ? '1' : '0',
+    }
+  : {};
+---
+<div class="bn-wrap">
+  <span class:list={['bn', { 'bn--m': tamanho === 'm', 'bn--s': tamanho === 's', 'bn--xs': tamanho === 'xs' }]} {...data}>
+    <span class="bn-v" aria-hidden="true">{valor}</span><span class="sr-only">{valor}</span>{fonte && <SourceNote id={fonte.id} n={fonte.n} />}
+  </span>
+  {rotulo && <span class="bn-rotulo"><slot name="rotulo">{rotulo}</slot></span>}
+  <slot />
+</div>
+
+<style>
+  .bn-wrap { display: block; }
+  .bn-rotulo {
+    display: block; margin-top: var(--e2); font-family: var(--fonte-mono); font-size: var(--t-rotulo);
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2);
+  }
+</style>
+

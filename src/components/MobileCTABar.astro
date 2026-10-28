@@ -1,0 +1,22 @@
+---
+const esconder = Astro.url.pathname.startsWith('/contato');
+---
+{!esconder && (
+  <div class="mcta sec-papel" role="region" aria-label="Agendar diagnóstico">
+    <a class="btn btn--primario" href="/contato">Agendar diagnóstico gratuito</a>
+  </div>
+)}
+
+<style>
+  .mcta {
+    display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; padding: var(--e1) var(--e2);
+    background: var(--branco); border-top: var(--borda) solid var(--linha-clara);
+  }
+  .mcta .btn { width: 100%; }
+  @media (max-width: 47.99rem) {
+    .mcta { display: block; }
+    :global(body) { padding-bottom: 4.5rem; }
+    /* Na Home o hero já tem o CTA na primeira tela: a barra só entra depois dele */
+    :global(html.js body.tem-hero-cta:not(.apos-hero)) .mcta { display: none; }
+  }
+</style>

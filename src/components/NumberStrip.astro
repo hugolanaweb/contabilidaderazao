@@ -1,0 +1,36 @@
+---
+import BigNumber from './BigNumber.astro';
+import SourceNote from './SourceNote.astro';
+---
+<ul class="ns lista-limpa">
+  <li class="ns-card">
+    <BigNumber tamanho="s" valor="5 → 2">
+      <p class="ns-txt">Cinco tributos sobre consumo viram dois: CBS e IBS.<SourceNote id="reforma-5-para-2" n="2" /></p>
+    </BigNumber>
+  </li>
+  <li class="ns-card">
+    <BigNumber tamanho="s" valor="2027" contar={{ ate: 2027 }}>
+      <p class="ns-txt">PIS e Cofins deixam de existir.<SourceNote id="reforma-2027" n="3" /></p>
+    </BigNumber>
+  </li>
+  <li class="ns-card">
+    <BigNumber tamanho="s" valor="R$ 4,8 mi" contar={{ ate: 4.8, prefixo: 'R$ ', sufixo: ' mi', casas: 1 }}>
+      <p class="ns-txt">Limite anual do Simples Nacional.<SourceNote id="simples-limite" n="4" /></p>
+    </BigNumber>
+  </li>
+  <li class="ns-card">
+    <BigNumber tamanho="s" valor="28%" contar={{ ate: 28, sufixo: '%' }}>
+      <p class="ns-txt">O Fator R que pode mudar o seu anexo no Simples.<SourceNote id="fator-r" n="5" /></p>
+    </BigNumber>
+  </li>
+</ul>
+
+<style>
+  .ns { display: grid; grid-template-columns: 1fr; border: var(--borda) solid var(--linha); }
+  @media (min-width: 40rem) { .ns { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 64rem) { .ns { grid-template-columns: repeat(4, 1fr); } }
+  .ns-card { padding: var(--e3); border-bottom: var(--borda) solid var(--linha); background: var(--superficie); }
+  @media (min-width: 40rem) { .ns-card { border-right: var(--borda) solid var(--linha); } }
+  .ns-txt { margin: var(--e1) 0 0; color: var(--fg-2); }
+</style>
+
